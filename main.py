@@ -36,7 +36,7 @@ else:
 def experiment(epochs):
 
     model = VAE(img_dim = 784, z_dim = 20, hidden_dim = 512, dropout = 0.5).to(device)
-    optimizer = optim.Adam(model.parameters(), lr = 1e-04)
+    optimizer = optim.Adam(model.parameters(), lr = 2e-04)
 
     for epoch in range(epochs):
         model.train()
@@ -65,7 +65,7 @@ def experiment(epochs):
                 x_target_test , mu_test, sigma_test = model(x_test.view(-1,784))
 
                 loss_test = vae_loss(x_target_test, x_test.view(-1,784), mu_test, sigma_test)
-                test_loss += loss_t.item()
+                test_loss += loss_test.item()
 
             test_loss = test_loss / len(test_loader)
 
@@ -88,13 +88,13 @@ def generate_img():
         latent_z = torch.randn(64,20).to(device)
         sample = model.decoder(latent_z).to(device)
 
-        save_image(sample.view(64, 1, 28, 28), './samples/sample_1.png')
+        save_image(sample.view(64, 1, 28, 28), './samples/sample_2.png')
 
 
 
 if __name__ == '__main__' :
 
-    # experiment(epochs = 20)
+    experiment(epochs = 40)
     generate_img()
     
 

@@ -37,10 +37,10 @@ class Encoder(nn.Module):
         
     def forward(self, x):
 
-        x = F.elu(self.linear1(x))
+        x = F.relu(self.linear1(x))
         x = self.drop(x)
 
-        x = torch.tanh(self.linear2(x))
+        x = F.relu(self.linear2(x))
         x = self.drop(x)
 
         params = self.out_layer(x)
@@ -86,10 +86,10 @@ class Decoder(nn.Module):
 
     def forward(self, x):
 
-        x = torch.tanh(self.linear1(x))
+        x = F.relu(self.linear1(x))
         x = self.drop(x)
 
-        x = F.elu(self.linear2(x))
+        x = F.relu(self.linear2(x))
         x = self.drop(x)
 
         x = torch.sigmoid(self.linear3(x))
@@ -136,7 +136,7 @@ class VAE(nn.Module):
 def vae_loss(x_target, x, mu, sigma):
     batch_size = x.size(0)
     
-    generative_loss = F.binary_cross_entropy(x_target, x)
+    generative_loss = F.binary_cross_entropy(x_target, x, reduction = 'sum')
 
     KLD_loss = 0.5 * torch.sum(
                                 torch.pow(mu, 2) +
@@ -147,7 +147,6 @@ def vae_loss(x_target, x, mu, sigma):
     loss = generative_loss + KLD_loss
     
     return loss
-
 
 
 
