@@ -1,0 +1,16 @@
+__pycache__/
+
+.cache
+
+myvenv/
+myenv/
+.env
+.venv
+env/
+venv/
+
+*.pt
+*.gz
+
+.idea
+.DS_Store
